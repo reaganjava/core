@@ -3,6 +3,10 @@ package com.reagan.core.data.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.reagan.core.data.dao.IPartitionRuleDao;
 import com.reagan.core.data.dao.ITableDao;
 import com.reagan.core.data.service.IParititonTableService;
@@ -19,22 +23,25 @@ import com.reagan.util.LoggerUtil;
  * <p>Company:Mopon</p>
  * <p>Copyright:Copyright(c)2013</p>
  */
+@Service("parititonTableService")
 public class ParititonTableServiceImpl implements IParititonTableService {
 	
 	private LoggerUtil loggerUtil = new LoggerUtil(ParititonTableServiceImpl.class);
-
+	
+	@Autowired
 	private IPartitionRuleDao partitionRuleDao;
 	
+	@Autowired
 	private ITableDao tableDao;
 
-	
+	@Transactional
 	public void createParition(ParititonTable parititonTable) {
 		partitionRuleDao.createUnionTable(parititonTable.getPartitionRule().getUnionCreateSQL());
 		partitionRuleDao.savePartitionRule(parititonTable.getPartitionRule());
 	}
 
 	
-	
+	@Transactional
 	public void deletePartition(ParititonTable parititonTable) {
 		final List<Table> tables = tableDao.queryTableForList(parititonTable.getTable());
 		new Thread() {
@@ -54,7 +61,7 @@ public class ParititonTableServiceImpl implements IParititonTableService {
 		partitionRuleDao.removePartitionRule(parititonTable.getPartitionRule().getId());
 	}
 
-	
+	@Transactional
 	public void exectuPartition() {
 		List<PartitionRule> partitionRules = partitionRuleDao.queryPartitionRuleForAllList();
 		for(PartitionRule partitionRule : partitionRules) {

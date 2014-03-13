@@ -10,7 +10,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-
 import com.reagan.core.data.dao.IBaseDao;
 
 /**
@@ -21,7 +20,6 @@ import com.reagan.core.data.dao.IBaseDao;
  * <p>Company:Mopon</p>
  * <p>Copyright:Copyright(c)2013</p>
  */
-
 public class BaseDaoImpl<T> extends JdbcDaoSupport implements IBaseDao<T> {
 	
 	public void execute(String sql) {

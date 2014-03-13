@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
 import com.reagan.core.data.dao.IBaseDao;
 import com.reagan.core.data.dao.ITableDao;
@@ -24,6 +25,7 @@ import com.reagan.core.util.ValidatorUtil;
  * <p>Company:Mopon</p>
  * <p>Copyright:Copyright(c)2013</p>
  */
+@Repository
 public class TableDaoImpl implements ITableDao {
 	
 	private static final String INSERT_TABLE = "INSERT INTO SYS_TABLE"
