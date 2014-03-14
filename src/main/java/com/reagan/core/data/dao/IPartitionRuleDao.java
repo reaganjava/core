@@ -3,7 +3,6 @@ package com.reagan.core.data.dao;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.stereotype.Repository;
 
 import com.reagan.core.entity.po.PartitionRule;
 
@@ -17,7 +16,6 @@ import com.reagan.core.entity.po.PartitionRule;
  * <p>Company:Mopon</p>
  * <p>Copyright:Copyright(c)2013</p>
  */
-@Repository
 public interface IPartitionRuleDao {
 	
 	/**

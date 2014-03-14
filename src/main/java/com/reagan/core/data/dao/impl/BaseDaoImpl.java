@@ -27,11 +27,19 @@ public class BaseDaoImpl<T> extends JdbcDaoSupport implements IBaseDao<T> {
 	}
 	
 	public void execute(String sql, Object[] args) {
-		this.getJdbcTemplate().update(sql, args);
+		executeReturn(sql, args);
+	}
+	
+	public int executeReturn(String sql, Object[] args) {
+		return this.getJdbcTemplate().update(sql, args);
 	}
 		
 	public void execute(String sql, Object[] args, int[] types) {
-		this.getJdbcTemplate().update(sql, args, types);
+		executeReturn(sql, args, types);
+	}
+	
+	public int executeReturn(String sql, Object[] args, int[] types) {
+		return this.getJdbcTemplate().update(sql, args, types);
 	}
 	
 	
@@ -76,6 +84,18 @@ public class BaseDaoImpl<T> extends JdbcDaoSupport implements IBaseDao<T> {
 	
 	public T load(String sql, Object pk, RowMapper<T> rowMapper) {
 		return this.getJdbcTemplate().queryForObject(sql, new Object[]{pk}, rowMapper);
+	}
+
+	@Override
+	public Object queryForValue(String sql, Object[] args, int[] types,
+			RowMapper<T> rowMapper) {
+		return this.getJdbcTemplate().queryForObject(sql, args, types, rowMapper);
+	}
+
+	@Override
+	public Object queryForValue(String sql, Object[] args,
+			RowMapper<T> rowMapper) {
+		return this.getJdbcTemplate().queryForObject(sql, args, rowMapper);
 	}
 
 }

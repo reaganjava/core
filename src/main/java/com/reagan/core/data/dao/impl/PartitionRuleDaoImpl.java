@@ -104,7 +104,7 @@ public class PartitionRuleDaoImpl implements IPartitionRuleDao {
 	
 	public void savePartitionRule(PartitionRule partitionRule) {
 		ObjectParams<PartitionRule> objectParams = new ObjectParams<PartitionRule>();
-		Object[] args = objectParams.objectArrayFactory(partitionRule, new String[]{"ID"});
+		Object[] args = objectParams.objectArrayFactory(partitionRule, new String[]{"id"});
 		baseDao.execute(INSERT_PARTITION_RULE, args);
 	}
 
