@@ -10,8 +10,6 @@ import java.util.concurrent.Executors;
 import net.rubyeye.xmemcached.MemcachedClient;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 
 /**
@@ -22,8 +20,6 @@ import org.springframework.stereotype.Component;
  * <p>Company:Mopon</p>
  * <p>Copyright:Copyright(c)2013</p>
  */
-@Scope("singleton")
-@Component("sessionManager")
 public class SessionManager {
 	
 	/**

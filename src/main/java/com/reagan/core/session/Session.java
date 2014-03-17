@@ -4,17 +4,10 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.reagan.core.data.dao.ICachedDao;
 import com.reagan.core.session.listener.SessionListener;
 
 
 
-
-
-@Component("session")
 public class Session implements Serializable {
 	
 	/**
@@ -45,12 +38,6 @@ public class Session implements Serializable {
 	 * 事件句柄
 	 */
 	private SessionListener listener = null;
-	
-	/**
-	 * 缓存
-	 */
-	@Autowired
-	protected ICachedDao cachedDao;
 	
 	/**
 	 * 方法用途: 初始化SESSION<br>
@@ -138,7 +125,7 @@ public class Session implements Serializable {
 		return sessionId;
 	}
 
-	public void addSessionListener(SessionListener listener) {
+	public void setListener(SessionListener listener) {
 		this.listener = listener;
 	}
 

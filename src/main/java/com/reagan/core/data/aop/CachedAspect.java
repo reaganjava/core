@@ -6,7 +6,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.reagan.core.data.beans.sys.MethodNode;
+import com.reagan.core.annotation.Cached;
 import com.reagan.core.data.dao.ICachedDao;
 import com.reagan.util.LoggerUtil;
 
@@ -24,6 +24,29 @@ public class CachedAspect {
 	}
 	
 	public Object around(ProceedingJoinPoint pjp) throws Throwable {
+		Class<?> clazz = pjp.getTarget().getClass();
+		String methodName = pjp.getSignature().getName();
+		Method[] methods = clazz.getMethods();
+		Cached cached = null;
+		Object result = null;
+		for(Method method : methods) {
+			if(method.getName().equals(methodName)) {
+				cached = method.getAnnotation(Cached.class);
+				break;
+			}
+		}
+		if(cached != null) {
+			if(cached.type() == 1) {
+				String fieldName = cached.field();
+				result = pkCached(pjp, fieldName);
+			} else if(cached.type() == 2) {
+				String key = cached.key();
+				result = customCached(pjp, key);
+			}
+		}
+		if(result != null) {
+			return result;
+		} 
 		return pjp.proceed();
 	}
 	
@@ -31,13 +54,13 @@ public class CachedAspect {
 		loggerUtil.debug("数据库路由结束");
 	}
 	
-	private Object pkCached(ProceedingJoinPoint pjp, MethodNode methodNode) throws Throwable {
+	private Object pkCached(ProceedingJoinPoint pjp, String fieldName) throws Throwable {
 		String key = pjp.getArgs()[0].toString();
 		Object result = null;
 		if(isCacheNull(key)) {
 			result = pjp.proceed();
 			for(Method m : result.getClass().getDeclaredMethods()) {
-				if(m.getName().toUpperCase().indexOf("GET" + methodNode.getPrimary().toUpperCase()) != -1) {
+				if(m.getName().toUpperCase().indexOf(fieldName.toUpperCase()) != -1) {
 					Method method = result.getClass().getDeclaredMethod(m.getName());
 					Object pk = method.invoke(result, null);
 					if(pk != null) {
@@ -54,10 +77,8 @@ public class CachedAspect {
 	}
 
 	
-	private Object customCached(ProceedingJoinPoint pjp, MethodNode methodNode) throws Throwable {
+	private Object customCached(ProceedingJoinPoint pjp, String key) throws Throwable {
 		Object result = null;
-		//得到缓存键
-		String key = methodNode.getKey();
 		//缓存不为空时
 		if(isCacheNull(key)) {
 			//调用方法
