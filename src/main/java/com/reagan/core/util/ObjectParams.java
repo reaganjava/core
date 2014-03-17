@@ -3,6 +3,8 @@ package com.reagan.core.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>Description: </p>
@@ -20,23 +22,23 @@ public class ObjectParams<T> {
 	
 	
 	public Object[] objectArrayFactory(T t, String[] filterField) {
-		Object[] objs = new Object[t.getClass().getDeclaredFields().length];
-		int index = 0;
+		//Object[] objs = new Object[t.getClass().getDeclaredFields().length];
+		List<Object> objs = new ArrayList<Object>();
 		for(Field field : t.getClass().getDeclaredFields()) {
 			if(filterField != null) {
 				for(String ffname : filterField) {
-					if(ffname.equals(field.getName())) {
+					if(ffname.indexOf(field.getName()) != -1) {
+						System.out.println(ffname + " : " + field.getName());
 						continue;
 					} else {
-						objs[index] = invokeMethod(t, field.getName(), null);
+						objs.add(invokeMethod(t, field.getName(), null));
 					}
 				}
 			} else {
-				objs[index] = invokeMethod(t, field.getName(), null);
+				objs.add(invokeMethod(t, field.getName(), null));
 			}
-			index++;
 		}
-		return objs;
+		return objs.toArray();
 	}
  
 	/**

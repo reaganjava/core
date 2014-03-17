@@ -87,15 +87,13 @@ public class BaseDaoImpl<T> extends JdbcDaoSupport implements IBaseDao<T> {
 	}
 
 	@Override
-	public Object queryForValue(String sql, Object[] args, int[] types,
-			RowMapper<T> rowMapper) {
-		return this.getJdbcTemplate().queryForObject(sql, args, types, rowMapper);
+	public Object queryForValue(String sql, Object[] args, int[] types, Class<?> requiredType) {
+		return this.getJdbcTemplate().queryForObject(sql, args, types, requiredType);
 	}
 
 	@Override
-	public Object queryForValue(String sql, Object[] args,
-			RowMapper<T> rowMapper) {
-		return this.getJdbcTemplate().queryForObject(sql, args, rowMapper);
+	public Object queryForValue(String sql, Object[] args, Class<?> requiredType) {
+		return this.getJdbcTemplate().queryForObject(sql, args, requiredType);
 	}
 
 }
