@@ -1,7 +1,6 @@
 package com.reagan.core.data.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import com.reagan.core.data.dao.ICachedDao;
 
@@ -18,7 +17,6 @@ import net.rubyeye.xmemcached.MemcachedClient;
  * <p>Company:Mopon</p>
  * <p>Copyright:Copyright(c)2013</p>
  */
-@Repository
 public class CachedDaoImpl implements ICachedDao {
 	
 	/** 

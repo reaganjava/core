@@ -4,7 +4,9 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 
+import com.reagan.core.util.PropertiesUtil;
 import com.reagan.core.util.SysXmlConfig;
+import com.reagan.util.LocalCached;
 
 
 /**
@@ -39,8 +41,14 @@ public class SysInitBean implements BeanPostProcessor{
 	 * @throws BeansException   
 	 */
 	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-		if(SysXmlConfig.getConfigInfo() == null) {
-			SysXmlConfig.SysConfigInit();
+		PropertiesUtil.init("sysconfig.properties");
+		String dataSwitch = PropertiesUtil.getProperty("sys.data.config.switch");
+		LocalCached.add("sys.data.path", PropertiesUtil.getProperty("sys.data.path"));
+		LocalCached.add("sys.data.config.switch", dataSwitch);
+		if(dataSwitch.equals("on")) {
+			if(SysXmlConfig.getConfigInfo() == null) {
+				SysXmlConfig.SysConfigInit();
+			}
 		}
 		return bean;
 	}

@@ -11,6 +11,7 @@ import org.dom4j.io.SAXReader;
 
 import com.reagan.core.data.beans.sys.Process;
 import com.reagan.core.exception.ConfigException;
+import com.reagan.util.LocalCached;
 import com.reagan.util.LoggerUtil;
 
 /**
@@ -48,8 +49,7 @@ public class SysXmlConfig extends DataConfig {
 		Document doc = null;
 		try {
 			loggerUtil.debug("加载DATA.XML配置文档");
-			PropertiesUtil.init("sysconfig.properties");
-			doc = saxReader.read(new File(PropertiesUtil.getProperty("sys.data.path")));
+			doc = saxReader.read(new File((String) LocalCached.get("sys.data.path")));
 		} catch (DocumentException e) {
 			e.printStackTrace();
 		}

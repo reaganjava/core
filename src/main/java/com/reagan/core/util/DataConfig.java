@@ -48,46 +48,6 @@ public class DataConfig {
 		String nodeName = methodElement.attributeValue("node");
 		//调用方法名
 		String methodName = methodElement.attributeValue("name");
-		//是否缓存
-		boolean isCahce = false;
-		//是否使用缓存
-		if(methodElement.attributeValue("cache") != null) {
-			isCahce = Boolean.parseBoolean(methodElement.attributeValue("cache"));
-			String kt = "";
-			//缓存主键方式
-			if(methodElement.attributeValue("style") != null) {
-				kt = methodElement.attributeValue("style");
-				switch(kt) {
-					case "pk": {
-						//以主键方式对象的主键字段
-						String primary = methodElement.attributeValue("primary");
-						method.setStyle(Style.PK);
-						if(primary == null) {
-							throw new ConfigException("绑定对象或者主键字段为空！");
-						}
-						method.setPrimary(primary);
-						break;
-					}
-					case "custom": {
-						//自定义方式读取自定义的键值
-						method.setStyle(Style.CUSTOM);
-						String key = methodElement.attributeValue("key");
-						if(key == null) {
-							throw new ConfigException("自定义主键为空！");
-						}
-						method.setKey(key);
-						break;
-					}
-				}
-			}
-			//缓存超时时间
-			int expired = 3000;
-			if(methodElement.attributeValue("expired") != null) {
-				expired = Integer.parseInt(methodElement.attributeValue("expired"));
-			}
-			method.setCache(isCahce);
-			method.setExpired(expired);
-		}
 		method.setDataNode(nodeName);
 		method.setMethodName(methodName);
 		

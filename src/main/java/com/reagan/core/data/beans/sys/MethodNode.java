@@ -19,8 +19,6 @@ public class MethodNode {
 	
 	private String methodName = null;
 	
-	private boolean cache = false;
-	
 	private Style style = null;
 	
 	private String primary = null;
@@ -28,20 +26,6 @@ public class MethodNode {
 	private String key = null;
 	
 	private int expired = 0;
-
-	private ICachedDao cachedDao;
-	
-	public void setCachedDao(ICachedDao cachedDao) {
-		this.cachedDao = cachedDao;
-	}
-
-	public boolean isCache() {
-		return cache;
-	}
-
-	public void setCache(boolean cache) {
-		this.cache = cache;
-	}
 	
 	public String getDataNode() {
 		return dataNode;
@@ -93,30 +77,5 @@ public class MethodNode {
 
 	public void setExpired(int expired) {
 		this.expired = expired;
-	}
-
-	public void writeMethodCache(String key, Object value) throws Exception {
-		if(!cachedDao.isMutex(key)) {
-			cachedDao.add(key, this.expired, value);
-		} else {
-			cachedDao.replace(key, this.expired, value);
-		}
-	}
-	
-	public void replaceMethodCache(String key, Object value) throws Exception {
-		cachedDao.replace(key, this.expired, value);
-	}
-	
-	public Object readMethodCache(String key) throws Exception {
-		return cachedDao.get(key);
-	}
-	
-	public boolean isCacheNull(String key) throws Exception {
-		System.out.println(cachedDao);
-		if(cachedDao.get(key) == null) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 }
