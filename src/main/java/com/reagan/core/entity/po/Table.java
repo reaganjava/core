@@ -2,6 +2,8 @@ package com.reagan.core.entity.po;
 
 import java.util.Date;
 
+import com.reagan.core.annotation.Mapper;
+
 /**
  * <p>Description:表对象 </p>
  * @date 2013年10月17日
@@ -13,15 +15,16 @@ import java.util.Date;
 public class Table {
 	
 	private Integer id;
-
+	@Mapper(column="TABLENAME")
 	private String tableName;
-	
+	@Mapper(column="CREATEDATE")
 	private Date createDate;
+	@Mapper(column="STATUS")
 	/**
 	 * 状态 0：有效 1：无效 2：已备份
 	 */
 	private Integer status;
-	
+	@Mapper(column="RULE_ID")
 	private Integer ruleId;
 
 	public Integer getId() {

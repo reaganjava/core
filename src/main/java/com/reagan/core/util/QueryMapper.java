@@ -1,5 +1,6 @@
 package com.reagan.core.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +22,7 @@ public class QueryMapper {
 	
 	public QueryMapper(String query) {
 		queryBuilder = new StringBuilder(query);
+		args = new ArrayList<Object>();
 	}
 	
 	public StringBuilder getQueryBuilder() {

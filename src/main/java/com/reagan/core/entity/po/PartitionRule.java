@@ -2,6 +2,8 @@ package com.reagan.core.entity.po;
 
 import java.util.Date;
 
+import com.reagan.core.annotation.Mapper;
+
 /**
  * <p>Description: 表策略建立</p>
  * @date 2013年10月17日
@@ -13,19 +15,19 @@ import java.util.Date;
 public class PartitionRule {
 
 	private Integer id;
-	
+	@Mapper(column="TABLENAME")
 	private String tableName;
-	
+	@Mapper(column="STARTDATE")
 	private Date startDate;
-	
+	@Mapper(column="INTERVAL")
 	private Integer interval;
-	
+	@Mapper(column="UNION_TABLE")
 	private String unionTable;
-	
+	@Mapper(column="CREATESQL")
 	private String createSQL;
-	
+	@Mapper(column="UNION_CREATESQL")
 	private String unionCreateSQL;
-	
+	@Mapper(column="UNION_UPDATESQL")
 	private String unionUpdateSQL;
 
 	public Integer getId() {
