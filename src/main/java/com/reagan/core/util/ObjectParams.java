@@ -80,6 +80,7 @@ public class ObjectParams<T> {
 	
 	public void objectArrayUpdateFactory(T t) {
 		List<Object> tempArgs = new ArrayList<Object>();
+		List<Object> whereArgs = new ArrayList<Object>();
 		Mapper classMapper = t.getClass().getAnnotation(Mapper.class);
 		try {
 			String tableName = getMapperTable(classMapper);
@@ -94,11 +95,13 @@ public class ObjectParams<T> {
 					}
 					if(mapper.updateWhere()) {
 						whereBuilder.append(" AND " + mapper.column() + "=? ");
+						whereArgs.add(invokeMethod(t, field.getName(), null));
 					}
 				}
 			}
 			sqlBuilder.replace(sqlBuilder.length() - 1, sqlBuilder.length(), " ");
 			sqlBuilder.append(whereBuilder);
+			tempArgs.addAll(whereArgs);
 			logger.info("执行SQL语句：" + sqlBuilder.toString());
 			this.sql = sqlBuilder.toString();
 			this.args =  tempArgs.toArray();
@@ -113,7 +116,6 @@ public class ObjectParams<T> {
 				Mapper mapper = field.getAnnotation(Mapper.class);
 				if(mapper != null) {
 					String column = mapper.column();
-					System.out.println(column + ":" + field.getName() + ":" + rs.getObject(column));
 					BeanUtils.copyProperty(t, field.getName(), rs.getObject(column));
 				}
 			}
