@@ -12,6 +12,7 @@ import com.reagan.core.annotation.Mapper;
  * <p>Company:Mopon</p>
  * <p>Copyright:Copyright(c)2013</p>
  */
+@Mapper(tableName="SYS_TABLE")
 public class Table {
 	
 	private Integer id;

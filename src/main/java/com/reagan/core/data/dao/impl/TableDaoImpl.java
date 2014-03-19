@@ -28,8 +28,6 @@ import com.reagan.core.util.ValidatorUtil;
 @Repository
 public class TableDaoImpl implements ITableDao {
 	
-	private static final String INSERT_TABLE = "INSERT INTO SYS_TABLE";
-	
 	private static final String DELETE_TABLE = "DELETE FROM SYS_TABLE WHERE 1=1";
 
 	private static final String DELETE_WHERE_BY_ID = " AND ID = ?";
@@ -51,7 +49,7 @@ public class TableDaoImpl implements ITableDao {
 	
 	public void saveTable(Table table) {
 		ObjectParams<Table> objectParams = new ObjectParams<Table>();
-		objectParams.objectArrayFactory(table, INSERT_TABLE);
+		objectParams.objectArrayFactory(table);
 		baseDao.execute(objectParams.getSql(), objectParams.getArgs());
 	}
 

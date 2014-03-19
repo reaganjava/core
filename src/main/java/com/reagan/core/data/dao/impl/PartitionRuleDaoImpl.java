@@ -30,8 +30,6 @@ import com.reagan.core.util.ValidatorUtil;
 @Repository
 public class PartitionRuleDaoImpl implements IPartitionRuleDao {
 	
-	private static final String INSERT_PARTITION_RULE = "INSERT INTO SYS_TABLE_RULE";
-	
 	private static final String UPDATE_BY_TABLENAME = "UPDATE SYS_TABLE_RULE"
 															+ " SET TABLENAME = ?"
 															+ " WHERE ID = ?";
@@ -96,7 +94,7 @@ public class PartitionRuleDaoImpl implements IPartitionRuleDao {
 	
 	public void savePartitionRule(PartitionRule partitionRule) {
 		ObjectParams<PartitionRule> objectParams = new ObjectParams<PartitionRule>();
-		objectParams.objectArrayFactory(partitionRule, INSERT_PARTITION_RULE);
+		objectParams.objectArrayFactory(partitionRule);
 		baseDao.execute(objectParams.getSql(), objectParams.getArgs());
 	}
 
