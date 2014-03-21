@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import com.reagan.core.data.dao.IBaseDao;
 import com.reagan.core.data.dao.IPartitionRuleDao;
 import com.reagan.core.entity.po.PartitionRule;
+import com.reagan.core.exception.MapperException;
 import com.reagan.core.util.ObjectParams;
 import com.reagan.core.util.ValidatorUtil;
 
@@ -94,8 +95,13 @@ public class PartitionRuleDaoImpl implements IPartitionRuleDao {
 	
 	public void savePartitionRule(PartitionRule partitionRule) {
 		ObjectParams<PartitionRule> objectParams = new ObjectParams<PartitionRule>();
-		objectParams.objectArrayFactory(partitionRule);
-		baseDao.execute(objectParams.getSql(), objectParams.getArgs());
+		try {
+			objectParams.objectArrayFactory(partitionRule);
+			baseDao.execute(objectParams.getSql(), objectParams.getArgs());
+		} catch (MapperException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	

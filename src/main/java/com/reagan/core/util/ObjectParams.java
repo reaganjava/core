@@ -49,68 +49,94 @@ public class ObjectParams<T> {
 	 * @param t 对象泛型
 	 * @param sql 插入语句的前段
 	 */
-	public void objectArrayFactory(T t) {
+	public void objectArrayFactory(T t) throws MapperException {
+		//零时插入参数
 		List<Object> tempArgs = new ArrayList<Object>();
+		//获取映射注解
 		Mapper classMapper = t.getClass().getAnnotation(Mapper.class);
-		try {
-			String tableName = getMapperTable(classMapper);
-			StringBuilder sqlBuilder = new StringBuilder("INSERT INTO " + tableName + " (");
-			StringBuilder paramBuilder = new StringBuilder(" VALUE(");
-			for(Field field : t.getClass().getDeclaredFields()) {
-				Mapper mapper = field.getAnnotation(Mapper.class);
-				if(mapper != null) {
-					if(mapper.insert()) { 
-						tempArgs.add(invokeMethod(t, field.getName(), null));
+		//返回表明
+		String tableName = getMapperTable(classMapper);
+		//SQL包装
+		StringBuilder sqlBuilder = new StringBuilder("INSERT INTO " + tableName + " (");
+		StringBuilder paramBuilder = new StringBuilder(" VALUE(");
+		for(Field field : t.getClass().getDeclaredFields()) {
+			Mapper mapper = field.getAnnotation(Mapper.class);
+			//映射不为空时处理
+			if(mapper != null) {
+				//是否支持插入
+				if(mapper.insert()) { 
+					Object value = invokeMethod(t, field.getName(), null);
+					//值不为空
+					if(value != null) {
+						tempArgs.add(value);
 						sqlBuilder.append(mapper.column() + ",");
 						paramBuilder.append("?,");
 					}
 				}
 			}
-			sqlBuilder.replace(sqlBuilder.length() - 1, sqlBuilder.length(), ")");
-			paramBuilder.replace(paramBuilder.length() - 1, paramBuilder.length(), ")");
-			sqlBuilder.append(paramBuilder);
-			logger.info("执行SQL语句：" + sqlBuilder.toString());
-			this.sql = sqlBuilder.toString();
-			this.args =  tempArgs.toArray();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+		//替换『，为）』
+		sqlBuilder.replace(sqlBuilder.length() - 1, sqlBuilder.length(), ")");
+		paramBuilder.replace(paramBuilder.length() - 1, paramBuilder.length(), ")");
+		sqlBuilder.append(paramBuilder);
+		logger.info("执行SQL语句：" + sqlBuilder.toString());
+		this.sql = sqlBuilder.toString();
+		this.args =  tempArgs.toArray();
 		
 	}
 	
-	public void objectArrayUpdateFactory(T t) {
+	/**
+	 * UPDATE操作自动包装
+	 * @param t 泛型
+	 * @throws MapperException 映射异常
+	 */
+	public void objectArrayUpdateFactory(T t) throws MapperException {
 		List<Object> tempArgs = new ArrayList<Object>();
 		List<Object> whereArgs = new ArrayList<Object>();
 		Mapper classMapper = t.getClass().getAnnotation(Mapper.class);
-		try {
-			String tableName = getMapperTable(classMapper);
-			StringBuilder sqlBuilder = new StringBuilder("UPDATE " + tableName + " SET ");
-			StringBuilder whereBuilder = new StringBuilder(" WHERE 1=1 ");
-			for(Field field : t.getClass().getDeclaredFields()) {
-				Mapper mapper = field.getAnnotation(Mapper.class);
-				if(mapper != null) {
-					if(mapper.update()) { 
-						tempArgs.add(invokeMethod(t, field.getName(), null));
+		
+		String tableName = getMapperTable(classMapper);
+		StringBuilder sqlBuilder = new StringBuilder("UPDATE " + tableName + " SET ");
+		StringBuilder whereBuilder = new StringBuilder(" WHERE 1=1 ");
+		for(Field field : t.getClass().getDeclaredFields()) {
+			Mapper mapper = field.getAnnotation(Mapper.class);
+			if(mapper != null) {
+				//更新字段
+				if(mapper.update()) { 
+					Object value = invokeMethod(t, field.getName(), null);
+					if(value != null) {
+						tempArgs.add(value);
 						sqlBuilder.append(mapper.column() + "=?,");
 					}
-					if(mapper.updateWhere()) {
+				}
+				//更新查询字段
+				if(mapper.updateWhere()) {
+					Object whereValue = invokeMethod(t, field.getName(), null);
+					if(whereValue != null) {
 						whereBuilder.append(" AND " + mapper.column() + "=? ");
-						whereArgs.add(invokeMethod(t, field.getName(), null));
+						whereArgs.add(whereValue);
+					} else {
+						throw new MapperException("更新查询参数不能为空"); 
 					}
 				}
 			}
-			sqlBuilder.replace(sqlBuilder.length() - 1, sqlBuilder.length(), " ");
-			sqlBuilder.append(whereBuilder);
-			tempArgs.addAll(whereArgs);
-			logger.info("执行SQL语句：" + sqlBuilder.toString());
-			this.sql = sqlBuilder.toString();
-			this.args =  tempArgs.toArray();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+		sqlBuilder.replace(sqlBuilder.length() - 1, sqlBuilder.length(), " ");
+		sqlBuilder.append(whereBuilder);
+		tempArgs.addAll(whereArgs);
+		logger.info("执行SQL语句：" + sqlBuilder.toString());
+		this.sql = sqlBuilder.toString();
+		this.args =  tempArgs.toArray();
 	}
 	
-	public T resultObjectFactory(T t, ResultSet rs) {
+	/**
+	 * 查询结果映射
+	 * @param t 泛型
+	 * @param rs resultSet数据库结果
+	 * @return 返回对象
+	 * @throws MapperException 映射异常
+	 */
+	public T resultObjectFactory(T t, ResultSet rs) throws MapperException {
 		try {
 			for(Field field : t.getClass().getDeclaredFields()) {
 				Mapper mapper = field.getAnnotation(Mapper.class);
@@ -120,8 +146,7 @@ public class ObjectParams<T> {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+			throw new MapperException("返回结果映射对象时出现异常:" + e.getMessage());
 		}
 		return t;
 	}
@@ -156,7 +181,12 @@ public class ObjectParams<T> {
 		}
 	}
 	
-	
+	/**
+	 * 获取映射表明
+	 * @param classMapper 映射类
+	 * @return 返回表明
+	 * @throws MapperException 表明为空抛出映射异常
+	 */
 	private String getMapperTable(Mapper classMapper) throws MapperException {
 		if(classMapper != null) {
 			String tableName = classMapper.tableName();

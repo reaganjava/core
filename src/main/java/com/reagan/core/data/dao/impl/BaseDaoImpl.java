@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -75,25 +76,45 @@ public class BaseDaoImpl<T> extends JdbcDaoSupport implements IBaseDao<T> {
 	}
 	
 	public T queryForObject(String sql, Object[] args, RowMapper<T> rowMapper) {
-		return this.getJdbcTemplate().queryForObject(sql, args, rowMapper);
+		try {
+			return this.getJdbcTemplate().queryForObject(sql, args, rowMapper);
+		} catch (IncorrectResultSizeDataAccessException e) {
+			return null;
+		}
 	}
 	
 	public T queryForObject(String sql, Object[] args, int[] types, RowMapper<T> rowMapper) {
-		return this.getJdbcTemplate().queryForObject(sql, args, types, rowMapper);
+		try {
+			return this.getJdbcTemplate().queryForObject(sql, args, types, rowMapper);
+		} catch (IncorrectResultSizeDataAccessException e) {
+			return null;
+		}
 	}
 	
 	public T load(String sql, Object pk, RowMapper<T> rowMapper) {
-		return this.getJdbcTemplate().queryForObject(sql, new Object[]{pk}, rowMapper);
+		try {
+			return this.getJdbcTemplate().queryForObject(sql, new Object[]{pk}, rowMapper);
+		} catch (IncorrectResultSizeDataAccessException e) {
+			return null;
+		}
 	}
 
 	@Override
 	public Object queryForValue(String sql, Object[] args, int[] types, Class<?> requiredType) {
-		return this.getJdbcTemplate().queryForObject(sql, args, types, requiredType);
+		try {
+			return this.getJdbcTemplate().queryForObject(sql, args, types, requiredType);
+		} catch (IncorrectResultSizeDataAccessException e) {
+			return null;
+		}
 	}
 
 	@Override
 	public Object queryForValue(String sql, Object[] args, Class<?> requiredType) {
-		return this.getJdbcTemplate().queryForObject(sql, args, requiredType);
+		try {
+			return this.getJdbcTemplate().queryForObject(sql, args, requiredType);
+		} catch (IncorrectResultSizeDataAccessException e) {
+			return null;
+		}
 	}
 
 }
