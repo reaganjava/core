@@ -1,7 +1,5 @@
 package com.reagan.core.data.beans.sys;
 
-
-import com.reagan.core.data.dao.ICachedDao;
 import com.reagan.core.enums.Style;
 import com.reagan.core.util.RoutingContextHolder;
 
