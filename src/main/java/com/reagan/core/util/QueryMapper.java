@@ -75,5 +75,9 @@ public class QueryMapper {
 		queryBuilder.append(where);
 		args.add(arg);
 	}
+	
+	public void addQueryString(String query) {
+		queryBuilder.append(query);
+	}
 
 }

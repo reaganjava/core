@@ -13,6 +13,8 @@ import org.apache.commons.beanutils.BeanUtils;
 import com.reagan.core.annotation.Mapper;
 import com.reagan.core.exception.MapperException;
 import com.reagan.util.LoggerUtil;
+import com.reagan.util.ValidatorUtil;
+
 
 /**
  * <p>Description: </p>
@@ -199,4 +201,58 @@ public class ObjectParams<T> {
 			throw new MapperException("类没有对象映射注解");
 		}
 	}
+	
+	public QueryMapper whereMapper(T t) throws MapperException {
+		QueryMapper queryMapper = new QueryMapper("SELECT {0} FROM ");
+		Class<?> clazz = t.getClass();
+		//获取映射注解
+		Mapper classMapper = t.getClass().getAnnotation(Mapper.class);
+		queryMapper.addQueryString(getMapperTable(classMapper) + " WHERE 1=1 ");
+		if(classMapper != null) {
+			for(Field field : clazz.getDeclaredFields()) {
+				Mapper mapper = field.getAnnotation(Mapper.class);
+				if(mapper != null) {
+					Object value = invokeMethod(t, field.getName(), null);
+					queryMapper = builderWhere(queryMapper, mapper, value);
+				}
+			}
+		} else {
+			throw new MapperException("类没有对象映射注解");
+		}
+		return queryMapper;
+	}
+	
+	public QueryMapper whereMapper(T t, int pageNO, int pageCount) throws MapperException {
+		QueryMapper queryMapper = whereMapper(t);
+		queryMapper.getQueryBuilder().append(" LIMIT ?, ? ");
+		queryMapper.getArgs().add(pageNO);
+		queryMapper.getArgs().add(pageCount);
+		return queryMapper;
+	}
+	
+	private QueryMapper builderWhere(QueryMapper queryMapper, Mapper mapper, Object value) {
+		if(value instanceof String) {
+			if(ValidatorUtil.isNotEmpty(value.toString())) {
+				sqlWhere(queryMapper, mapper, value);
+			}
+		} else {
+			if(ValidatorUtil.isNotObjectNull(value)) {
+				sqlWhere(queryMapper, mapper, value);
+			}
+		}
+		return queryMapper;
+	}
+	
+	private QueryMapper sqlWhere(QueryMapper queryMapper, Mapper mapper, Object value) {
+		if(mapper.like()) {
+			queryMapper.addQueryWhere(" AND " + mapper.column() + " LIKE ?", "%" + value + "%");
+		} else if(mapper.range()) {
+			queryMapper.addQueryWhere(" AMD " + mapper.column() + " > ? ", value);
+			queryMapper.addQueryWhere(" AMD " + mapper.column() + " < ? ", value);
+		} else {
+			queryMapper.addQueryWhere(" AND " + mapper.column() + mapper.compare() + "?", value);
+		}
+		return queryMapper;
+	}
+	 
 }
