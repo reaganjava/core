@@ -12,7 +12,6 @@ import org.dom4j.Element;
 
 import com.reagan.core.data.beans.sys.MethodNode;
 import com.reagan.core.data.beans.sys.Process;
-import com.reagan.core.enums.Style;
 import com.reagan.core.exception.ConfigException;
 import com.reagan.util.LoggerUtil;
 /**
