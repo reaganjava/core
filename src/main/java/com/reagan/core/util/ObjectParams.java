@@ -246,9 +246,6 @@ public class ObjectParams<T> {
 	private QueryMapper sqlWhere(QueryMapper queryMapper, Mapper mapper, Object value) {
 		if(mapper.like()) {
 			queryMapper.addQueryWhere(" AND " + mapper.column() + " LIKE ?", "%" + value + "%");
-		} else if(mapper.range()) {
-			queryMapper.addQueryWhere(" AMD " + mapper.column() + " > ? ", value);
-			queryMapper.addQueryWhere(" AMD " + mapper.column() + " < ? ", value);
 		} else {
 			queryMapper.addQueryWhere(" AND " + mapper.column() + mapper.compare() + "?", value);
 		}

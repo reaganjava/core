@@ -56,10 +56,4 @@ public @interface Mapper {
 	 */
 	public String compare() default "=";
 	
-	/**
-	 * 是否为区域查询
-	 * @return 如果为区域查询返回真
-	 */
-	public boolean range() default false;
-	
 }
