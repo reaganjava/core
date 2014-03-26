@@ -14,14 +14,6 @@ import com.reagan.core.entity.po.Table;
  */
 public interface ITableDao {
 
-	public void saveTable(Table table);
 	
-	public void deleteTable(Table table);
-	
-	public List<Table> queryTableForAll();
-	
-	public List<Table> queryTableForList(Table table);
-	
-	public List<Table> queryTableForList(Table table, String createStartTime, String endStartTime);
 	
 }

@@ -24,20 +24,28 @@ import com.reagan.util.ValidatorUtil;
  * <p>Company:Mopon</p>
  * <p>Copyright:Copyright(c)2013</p>
  */
-public class ObjectParams<T> {	
+public class ObjectMapperParams<T> {	
 	
-	private LoggerUtil logger = new LoggerUtil(ObjectParams.class);
+	private LoggerUtil logger = new LoggerUtil(ObjectMapperParams.class);
 	
 	/**
-	 * 插入参数
+	 * 参数
 	 */
-	private Object[] args;
+	private Object[] args = null;
 	
 	/**
 	 * 包装SQL
 	 */
-	private String sql;
+	private String sql = null;
 	
+	
+	public String[] columns = null;
+	
+	
+	public void setColumns(String[] columns) {
+		this.columns = columns;
+	}
+
 	public Object[] getArgs() {
 		return args;
 	}
@@ -143,11 +151,20 @@ public class ObjectParams<T> {
 			for(Field field : t.getClass().getDeclaredFields()) {
 				Mapper mapper = field.getAnnotation(Mapper.class);
 				if(mapper != null) {
-					String column = mapper.column();
-					BeanUtils.copyProperty(t, field.getName(), rs.getObject(column));
+					if(columns == null) {
+						String column = mapper.column();
+						BeanUtils.copyProperty(t, field.getName(), rs.getObject(column));
+					} else {
+						for(String column : columns) {
+							if(mapper.column().equals(column)) {
+								BeanUtils.copyProperty(t, field.getName(), rs.getObject(column));
+							}
+						}
+					}
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new MapperException("返回结果映射对象时出现异常:" + e.getMessage());
 		}
 		return t;

@@ -13,12 +13,12 @@ public class QueryMapper {
 	/**
 	 * 查询语句
 	 */
-	private StringBuilder queryBuilder;
+	private StringBuilder queryBuilder = null;
 	
 	/**
 	 * 参数
 	 */
-	private List<Object> args;
+	private List<Object> args = null;
 	
 	public QueryMapper(String query) {
 		queryBuilder = new StringBuilder(query);
@@ -51,13 +51,17 @@ public class QueryMapper {
 	
 	/**
 	 * 返回SQL字符串并可以替换里面的为{0}的占位符
-	 * @param params 替换的参数
+	 * @param replaces 替换的参数
 	 * @return String
 	 */
-	public String toQueryString(String[] params) {
+	public String toQueryString(String[] replaces) {
 		String queryString = queryBuilder.toString();
-		for(int i = 0; i < params.length; i++) {
-			queryString = queryString.replace("{" + i + "}", params[0]);
+		if(replaces != null) {
+			for(int i = 0; i < replaces.length; i++) {
+				queryString = queryString.replace("{" + i + "}", replaces[0]);
+			}
+		} else {
+			queryString = queryString.replace("{" + 0 + "}", "*");
 		}
 		return queryString;
 	}
