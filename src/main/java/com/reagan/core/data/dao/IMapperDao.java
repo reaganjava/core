@@ -16,7 +16,7 @@ public interface IMapperDao<T> {
 	 * 保存实体对象
 	 * @param t 实体对象
 	 */
-	public void save(T t);
+	public void save(T t) throws Exception;
 
 	/**
 	 * 更新实体对象

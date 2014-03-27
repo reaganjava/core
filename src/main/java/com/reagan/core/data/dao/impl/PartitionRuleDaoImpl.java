@@ -17,7 +17,6 @@ import com.reagan.core.data.dao.IPartitionRuleDao;
 import com.reagan.core.entity.po.PartitionRule;
 import com.reagan.core.exception.MapperException;
 import com.reagan.core.util.ObjectMapperParams;
-import com.reagan.core.util.ValidatorUtil;
 
 
 /**

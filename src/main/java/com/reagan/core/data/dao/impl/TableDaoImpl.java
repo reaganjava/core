@@ -15,7 +15,7 @@ import com.reagan.core.data.dao.IBaseDao;
 import com.reagan.core.data.dao.ITableDao;
 import com.reagan.core.entity.po.Table;
 import com.reagan.core.exception.MapperException;
-import com.reagan.core.util.ValidatorUtil;
+
 
 /**
  * <p>Description: </p>

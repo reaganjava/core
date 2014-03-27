@@ -20,12 +20,13 @@ public abstract class MapperDaoImpl<T> implements IMapperDao<T> {
 	private ObjectMapperParams<T> objectMapperParams = new ObjectMapperParams<T>();
 	
 	@Override
-	public void save(T t) {
+	public void save(T t) throws Exception {
 		try {
 			objectMapperParams.objectArrayFactory(t);
 			baseDao.execute(objectMapperParams.getSql(), objectMapperParams.getArgs());
-		} catch (MapperException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			throw new Exception(e.getMessage());
 		}
 	}
 	
@@ -34,7 +35,7 @@ public abstract class MapperDaoImpl<T> implements IMapperDao<T> {
 		try {
 			objectMapperParams.objectArrayUpdateFactory(t);
 			return baseDao.executeReturn(objectMapperParams.getSql(), objectMapperParams.getArgs());
-		} catch (MapperException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
 		}
@@ -45,24 +46,24 @@ public abstract class MapperDaoImpl<T> implements IMapperDao<T> {
 		try {
 			QueryMapper mapper = objectMapperParams.whereMapper(t);
 			return baseDao.executeReturn(mapper.toQueryString(), mapper.toQueryArgs());
-		} catch (MapperException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
 		}
 	}
 	
 	@Override
-	public T query(T t) {
+	public T query(T t)  {
 		return query(t, null);
 	}
 
 	@Override
-	public T query(T t, String[] replaces) {
+	public T query(T t, String[] replaces)  {
 		try {
 			objectMapperParams.setColumns(replaces);
 			QueryMapper mapper = objectMapperParams.whereMapper(t);
 			return baseDao.queryForObject(mapper.toQueryString(replaces), mapper.toQueryArgs(), getRowMapper(objectMapperParams));
-		} catch (MapperException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -79,7 +80,7 @@ public abstract class MapperDaoImpl<T> implements IMapperDao<T> {
 			objectMapperParams.setColumns(replaces);
 			QueryMapper mapper = objectMapperParams.whereMapper(t);
 			return baseDao.queryForList(mapper.toQueryString(replaces), mapper.toQueryArgs(), getRowMapper(objectMapperParams));
-		} catch (MapperException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
