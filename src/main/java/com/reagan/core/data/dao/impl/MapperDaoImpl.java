@@ -20,6 +20,11 @@ public abstract class MapperDaoImpl<T> implements IMapperDao<T> {
 	private ObjectMapperParams<T> objectMapperParams = new ObjectMapperParams<T>();
 	
 	@Override
+	public IBaseDao<T> getBaseDao() {
+		return baseDao;
+	}
+	
+	@Override
 	public void save(T t) throws Exception {
 		try {
 			objectMapperParams.objectArrayFactory(t);

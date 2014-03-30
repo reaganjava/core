@@ -87,4 +87,6 @@ public interface IMapperDao<T> {
 	 */
 	public RowMapper<T> getRowMapper(ObjectMapperParams<T> objectMapperParams);
 
+	IBaseDao<T> getBaseDao();
+
 }
