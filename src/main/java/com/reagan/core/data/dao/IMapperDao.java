@@ -17,6 +17,13 @@ public interface IMapperDao<T> {
 	 * @param t 实体对象
 	 */
 	public void save(T t) throws Exception;
+	
+	/**
+	 * 保存实体对象
+	 * @param t 实体对象
+	 * @return int 返回主键
+	 */
+	public Number saveRePk(T t) throws Exception;
 
 	/**
 	 * 更新实体对象

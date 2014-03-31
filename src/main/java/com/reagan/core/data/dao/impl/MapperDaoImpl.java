@@ -3,6 +3,7 @@ package com.reagan.core.data.dao.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.support.KeyHolder;
 
 import com.reagan.core.data.dao.IBaseDao;
 import com.reagan.core.data.dao.IMapperDao;
@@ -32,6 +33,17 @@ public abstract class MapperDaoImpl<T> implements IMapperDao<T> {
 			e.printStackTrace();
 			throw new Exception(e.getMessage());
 		}
+	}
+	
+	/**
+	 * 保存实体对象
+	 * @param t 实体对象
+	 * @return int 返回主键
+	 */
+	public Number saveRePk(T t) throws Exception {
+		objectMapperParams.objectArrayFactory(t);
+		KeyHolder keyHolder = baseDao.saveRePrimarykey(objectMapperParams.getSql(), objectMapperParams.getArgs());
+		return keyHolder.getKey();
 	}
 	
 	@Override
