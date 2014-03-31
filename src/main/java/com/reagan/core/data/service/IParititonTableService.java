@@ -1,6 +1,5 @@
 package com.reagan.core.data.service;
 
-import com.reagan.core.entity.bo.ParititonTable;
 
 /**
  * <p>Description: </p>

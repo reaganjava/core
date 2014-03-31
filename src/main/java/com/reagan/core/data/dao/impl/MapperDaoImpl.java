@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.reagan.core.data.dao.IBaseDao;
 import com.reagan.core.data.dao.IMapperDao;
-import com.reagan.core.exception.MapperException;
 import com.reagan.core.util.ObjectMapperParams;
 import com.reagan.core.util.QueryMapper;
 import com.reagan.util.PageBean;

@@ -1,7 +1,5 @@
 package com.reagan.core.data.dao;
 
-import java.util.List;
-
 import com.reagan.core.entity.po.Table;
 
 /**
@@ -12,7 +10,7 @@ import com.reagan.core.entity.po.Table;
  * <p>Company:Mopon</p>
  * <p>Copyright:Copyright(c)2013</p>
  */
-public interface ITableDao {
+public interface ITableDao extends IMapperDao<Table> {
 
 	
 	

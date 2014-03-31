@@ -1,10 +1,7 @@
 package com.reagan.core.data.dao;
 
-import java.util.Date;
-import java.util.List;
-
-
 import com.reagan.core.entity.po.PartitionRule;
+
 
 
 
@@ -16,8 +13,10 @@ import com.reagan.core.entity.po.PartitionRule;
  * <p>Company:Mopon</p>
  * <p>Copyright:Copyright(c)2013</p>
  */
-public interface IPartitionRuleDao {
+public interface IPartitionRuleDao extends IMapperDao<PartitionRule> {
 	
+	public void createTableRule(String createSQL);
 	
+	public void updateTableRule(String updateSQL);
 
 }
