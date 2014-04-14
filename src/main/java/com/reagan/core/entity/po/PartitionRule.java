@@ -9,7 +9,7 @@ import com.reagan.core.annotation.Mapper;
  * @date 2013年10月17日
  * @author reagan
  * @version 1.0
- * <p>Company:Mopon</p>
+ * <p>Company:reagan</p>
  * <p>Copyright:Copyright(c)2013</p>
  */
 @Mapper(tableName="SYS_TABLE_RUEL")

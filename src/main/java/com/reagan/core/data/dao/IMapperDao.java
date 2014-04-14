@@ -76,7 +76,7 @@ public interface IMapperDao<T> {
 	 * @param pageCount 每页记录数
 	 * @return 返回分页对象
 	 */
-	public PageBean<T> queryForPage(T t, int pageNO, int pageCount);
+	public PageBean<T> queryForPage(T t, int pageNO, int pageRows);
 
 	/**
 	 * 
@@ -86,7 +86,7 @@ public interface IMapperDao<T> {
 	 * @param pageCount 每页记录数
 	 * @return 返回分页对象
 	 */
-	public PageBean<T> queryForPage(T t, String[] replace, int pageNO, int pageCount);
+	public PageBean<T> queryForPage(T t, String[] replace, int pageNO, int pageRows);
 
 	/**
 	 * 返回实体映射对象

@@ -103,12 +103,12 @@ public abstract class MapperDaoImpl<T> implements IMapperDao<T> {
 	}
 	
 	@Override
-	public PageBean<T> queryForPage(T t, int pageNO, int pageCount) {
-		return queryForPage(t, null, pageNO, pageCount);
+	public PageBean<T> queryForPage(T t, int pageNO, int pageRows) {
+		return queryForPage(t, null, pageNO, pageRows);
 	}
 
 	@Override
-	public PageBean<T> queryForPage(T t, String[] replaces, int pageNO, int pageCount) {
+	public PageBean<T> queryForPage(T t, String[] replaces, int pageNO, int pageRows) {
 		try {
 			objectMapperParams.setColumns(replaces);
 			QueryMapper mapper = objectMapperParams.whereMapper(t);
@@ -119,15 +119,17 @@ public abstract class MapperDaoImpl<T> implements IMapperDao<T> {
 			}
 			long count = (long) baseDao.queryForValue(mapper.toQueryString(new String[]{"count(*)"}), mapper.toQueryArgs(), Long.class);
 			//设置开始位置
-			int startPage = pageNO * pageCount;
-			mapper = objectMapperParams.whereMapper(t, startPage, pageCount);
+			int startPage = pageNO * pageRows;
+			mapper = objectMapperParams.whereMapper(t, startPage, pageRows);
 			List<T> resultList = baseDao.queryForList(mapper.toQueryString(replaces), mapper.toQueryArgs(), getRowMapper(objectMapperParams));
 			//放入分页容器
 			pageBean.setDataList(resultList);
 			//设置页大小
-			pageBean.setPageSize(pageCount);
+			pageBean.setPageSize(pageRows);
 			//总记录数
 			pageBean.setRecordCount(count);
+			
+			pageBean.setPageCount(count);
 			return pageBean;
 		} catch (Exception e) {
 			e.printStackTrace();

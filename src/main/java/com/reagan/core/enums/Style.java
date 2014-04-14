@@ -5,7 +5,7 @@ package com.reagan.core.enums;
  * @date 2013年11月22日
  * @author R
  * @version 1.0
- * <p>Company:Mopon</p>
+ * <p>Company:reagan</p>
  * <p>Copyright:Copyright(c)2013</p>
  */
 public enum Style {
