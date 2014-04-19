@@ -219,8 +219,17 @@ public class ObjectMapperParams<T> {
 		}
 	}
 	
-	public QueryMapper whereMapper(T t) throws MapperException {
+	public QueryMapper deleteWhereMapper(T t) throws MapperException {
+		QueryMapper queryMapper = new QueryMapper("DELETE FROM ");
+		return whereMapper(t, queryMapper);
+	}
+	
+	public QueryMapper queryWhereMapper(T t) throws MapperException {
 		QueryMapper queryMapper = new QueryMapper("SELECT {0} FROM ");
+		return whereMapper(t, queryMapper);
+	}
+	
+	public QueryMapper whereMapper(T t, QueryMapper queryMapper) throws MapperException {
 		Class<?> clazz = t.getClass();
 		//获取映射注解
 		Mapper classMapper = t.getClass().getAnnotation(Mapper.class);
@@ -240,7 +249,7 @@ public class ObjectMapperParams<T> {
 	}
 	
 	public QueryMapper whereMapper(T t, int pageNO, int pageCount) throws MapperException {
-		QueryMapper queryMapper = whereMapper(t);
+		QueryMapper queryMapper = queryWhereMapper(t);
 		queryMapper.getQueryBuilder().append(" LIMIT ?, ? ");
 		queryMapper.getArgs().add(pageNO);
 		queryMapper.getArgs().add(pageCount);

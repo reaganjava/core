@@ -60,7 +60,7 @@ public abstract class MapperDaoImpl<T> implements IMapperDao<T> {
 	@Override
 	public int delete(T t) {		
 		try {
-			QueryMapper mapper = objectMapperParams.whereMapper(t);
+			QueryMapper mapper = objectMapperParams.deleteWhereMapper(t);
 			return baseDao.executeReturn(mapper.toQueryString(), mapper.toQueryArgs());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -77,7 +77,7 @@ public abstract class MapperDaoImpl<T> implements IMapperDao<T> {
 	public T query(T t, String[] replaces)  {
 		try {
 			objectMapperParams.setColumns(replaces);
-			QueryMapper mapper = objectMapperParams.whereMapper(t);
+			QueryMapper mapper = objectMapperParams.queryWhereMapper(t);
 			return baseDao.queryForObject(mapper.toQueryString(replaces), mapper.toQueryArgs(), getRowMapper(objectMapperParams));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -94,7 +94,7 @@ public abstract class MapperDaoImpl<T> implements IMapperDao<T> {
 	public List<T> queryForList(T t, String[] replaces) {
 		try {
 			objectMapperParams.setColumns(replaces);
-			QueryMapper mapper = objectMapperParams.whereMapper(t);
+			QueryMapper mapper = objectMapperParams.queryWhereMapper(t);
 			return baseDao.queryForList(mapper.toQueryString(replaces), mapper.toQueryArgs(), getRowMapper(objectMapperParams));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -111,7 +111,7 @@ public abstract class MapperDaoImpl<T> implements IMapperDao<T> {
 	public PageBean<T> queryForPage(T t, String[] replaces, int pageNO, int pageRows) {
 		try {
 			objectMapperParams.setColumns(replaces);
-			QueryMapper mapper = objectMapperParams.whereMapper(t);
+			QueryMapper mapper = objectMapperParams.queryWhereMapper(t);
 			PageBean<T> pageBean = new PageBean<T>();
 			pageBean.setCurrentPage(pageNO);
 			if(pageNO > 0) {
