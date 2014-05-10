@@ -4,7 +4,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 
-import com.reagan.core.util.PropertiesUtil;
+import com.reagan.util.PropertiesUtil;
 import com.reagan.core.util.SysXmlConfig;
 import com.reagan.util.LocalCached;
 
