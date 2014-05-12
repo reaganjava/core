@@ -1,10 +1,9 @@
 package com.reagan.core.data.beans.sys;
 
-import com.reagan.core.enums.Style;
 import com.reagan.core.util.RoutingContextHolder;
 
 /**
- * <p>Description: </p>
+ * <p>Description: 方法节点</p>
  * @date 2013年11月18日
  * @author rr
  * @version 1.0
@@ -13,17 +12,15 @@ import com.reagan.core.util.RoutingContextHolder;
  */
 public class MethodNode {
 	
+	/**
+	 * 数据库节点
+	 */
 	private String dataNode = null;
 	
+	/**
+	 * 处理函数名
+	 */
 	private String methodName = null;
-	
-	private Style style = null;
-	
-	private String primary = null;
-	
-	private String key = null;
-	
-	private int expired = 0;
 	
 	public String getDataNode() {
 		return dataNode;
@@ -43,37 +40,5 @@ public class MethodNode {
 	
 	public void setContextHolder() {
 		RoutingContextHolder.setDataSourceType(this.dataNode);
-	}
-	
-	public Style getStyle() {
-		return style;
-	}
-
-	public void setStyle(Style style) {
-		this.style = style;
-	}
-
-	public String getPrimary() {
-		return primary;
-	}
-
-	public void setPrimary(String primary) {
-		this.primary = primary;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
-
-	public int getExpired() {
-		return expired;
-	}
-
-	public void setExpired(int expired) {
-		this.expired = expired;
 	}
 }

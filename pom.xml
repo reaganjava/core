@@ -108,18 +108,6 @@
 			<version>1.2.0.RELEASE</version>
 		</dependency>
 		<!-- spring end -->
-		<!-- proxool begin -->
-		<dependency>
-			<groupId>proxool</groupId>
-			<artifactId>proxool</artifactId>
-			<version>0.9.1</version>
-		</dependency>
-		<dependency>
-			<groupId>proxool_cglib</groupId>
-			<artifactId>proxool_cglib</artifactId>
-			<version>0.9.1</version>
-		</dependency>
-		<!-- proxool end -->
 		<!-- mongodb memcached begin -->
 		<dependency>
 			<groupId>com.googlecode.xmemcached</groupId>

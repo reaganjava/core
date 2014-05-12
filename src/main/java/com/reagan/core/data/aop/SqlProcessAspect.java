@@ -43,7 +43,6 @@ public class SqlProcessAspect {
 				//调用方法
 				String methodName = pjp.getSignature().getName();		
 				loggerUtil.debug("路由目标对象：" + className + "的方法：" + methodName);
-				System.out.println("路由目标对象：" + className + "的方法：" + methodName);
 				//得到方法节点
 				MethodNode methodNode = process.routeDataSource(className, methodName);
 				

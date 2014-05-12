@@ -6,53 +6,69 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 用于数据库与实体的映射
- * @author reagan
- *
+* @ClassName: Mapper
+* @Description: 用于映射数据库表操作的注解对象
+* @author reagan
+* @date 2014年5月12日 下午2:15:14
+*
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD,ElementType.TYPE})
 public @interface Mapper {
 	
 	/**
-	 * 表名映射
-	 * @return 数据库表名
+	* @Title: tableName
+	* @Description: 描述表明
+	* @return String
+	* @throws
 	 */
 	public String tableName() default "";
 
 	/**
-	 * 表字段映射
-	 * @return 数据库表字段名
+	* @Title: column
+	* @Description: 描述列
+	* @return String
+	* @throws
 	 */
 	public String column() default "";
 	
 	/**
-	 * 是否为插入字段
-	 * @return 如果为可以插入字段返回真
+	* @Title: insert
+	* @Description: 插入标记为FLASH不生成插入
+	* @return boolean
+	* @throws
 	 */
 	public boolean insert() default true;
 	
 	/**
-	 * 是否为更新字段
-	 * @return 如果为可以更新字段返回真
+	* @Title: update
+	* @Description: 更新标记为FLASH不生成更新
+	* @return boolean
+	* @throws
 	 */
 	public boolean update() default false;
 	
 	/**
-	 * 是否为更新条件字段
-	 * @return 如果为可以更新条件字段返回真
+	* @Title: updateWhere
+	* @Description: 更新查询条件
+	* @return boolean
+	* @throws
 	 */
 	public boolean updateWhere() default false;
 	
 	/**
-	 * 模糊查询字段
-	 * @return 如果为模糊查询字段返回真
+	* @Title: like
+	* @Description: 模糊查询标记为FLASH时不做模糊查询
+	* @return boolean
+	* @throws
 	 */
 	public boolean like() default false;
 	
 	/**
-	 * 比较字符串默认为 = ， 可选 >,<,>=,<=
-	 * @return 返回查询比较字符串
+	* @Title: compare
+	* @Description: 查询条件比较关键字默认为= 可以使用 > < >= <=
+	* @return String
+	* @throws
 	 */
 	public String compare() default "=";
 	
