@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+
 /**
 * @ClassName: Mapper
 * @Description: 用于映射数据库表操作的注解对象
@@ -72,4 +73,30 @@ public @interface Mapper {
 	 */
 	public String compare() default "=";
 	
+	
+	/**
+	* @Title: order
+	* @Description: 排序字段
+	* @return String
+	* @throws
+	 */
+	public boolean order() default false;
+	
+	/**
+	* @Title: orderMode
+	* @Description: 排序模式
+	* @return String
+	* @throws
+	 */
+	public String orderMode() default "ASC";
+	
+	
+	/**
+	* @Title: orderSort
+	* @Description: 排序先后序号
+	* @return String
+	* @throws
+	 */
+	public int orderSort() default 0;
+
 }

@@ -1,9 +1,12 @@
 package com.reagan.core.data.dao;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.RowMapper;
 
+import com.reagan.core.exception.MapperException;
 import com.reagan.core.util.ObjectMapperParams;
 import com.reagan.util.PageBean;
 /**
@@ -16,14 +19,14 @@ public interface IMapperDao<T> {
 	 * 保存实体对象
 	 * @param t 实体对象
 	 */
-	public void save(T t) throws Exception;
+	public void save(T t) throws SQLException, DuplicateKeyException, MapperException;
 	
 	/**
 	 * 保存实体对象
 	 * @param t 实体对象
 	 * @return int 返回主键
 	 */
-	public Number saveRePk(T t) throws Exception;
+	public Number saveRePk(T t) throws SQLException, MapperException;
 
 	/**
 	 * 更新实体对象

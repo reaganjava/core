@@ -4,9 +4,11 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 
+import com.reagan.util.LoggerUtil;
 import com.reagan.util.PropertiesUtil;
 import com.reagan.core.util.SysXmlConfig;
 import com.reagan.util.LocalCached;
+import com.reagan.util.init.IBeanInitialization;
 
 
 /**
@@ -19,6 +21,8 @@ import com.reagan.util.LocalCached;
  */
 @Component
 public class SysInitBean implements BeanPostProcessor{
+	
+	private LoggerUtil loggerUtil = new LoggerUtil(SysInitBean.class);
 	
 	/** 
 	 * 方法用途: 初始BEAN前调用<br>
@@ -50,6 +54,16 @@ public class SysInitBean implements BeanPostProcessor{
 				SysXmlConfig.SysConfigInit();
 			}
 		}
+		if(bean instanceof IBeanInitialization) {
+			IBeanInitialization beanInitialization = (IBeanInitialization) bean;
+			try {
+				loggerUtil.info("========================系统启动时进行初始化处理========================");
+				beanInitialization.initializer();
+				loggerUtil.info("========================初始化完成========================");
+			} catch (Exception e) {
+			e.printStackTrace();
+			}
+			}
 		return bean;
 	}
 

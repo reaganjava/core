@@ -2,6 +2,7 @@ package com.reagan.core.data.dao;
 
 import java.util.List;
 
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.KeyHolder;
 
@@ -14,6 +15,8 @@ import org.springframework.jdbc.support.KeyHolder;
  * <p>Copyright:Copyright(c)2013</p>
  */
 public interface IBaseDao<T> {
+	
+	public JdbcTemplate getTemplate();
 	
 	/**
 	 * 方法用途: 执行sql<br>

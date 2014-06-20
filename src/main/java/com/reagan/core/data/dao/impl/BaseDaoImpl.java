@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.List;
 
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -27,6 +28,11 @@ import com.reagan.util.LoggerUtil;
 public class BaseDaoImpl<T> extends JdbcDaoSupport implements IBaseDao<T> {
 	
 	private LoggerUtil logger = new LoggerUtil(BaseDaoImpl.class);
+	
+	
+	public JdbcTemplate getTemplate() {
+		return this.getJdbcTemplate();
+	}
 	
 	public void execute(String sql) {
 		logger.info("execute 函数执行SQL:" + sql);

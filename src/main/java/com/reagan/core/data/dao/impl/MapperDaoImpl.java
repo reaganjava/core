@@ -1,12 +1,15 @@
 package com.reagan.core.data.dao.impl;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.support.KeyHolder;
 
 import com.reagan.core.data.dao.IBaseDao;
 import com.reagan.core.data.dao.IMapperDao;
+import com.reagan.core.exception.MapperException;
 import com.reagan.core.util.ObjectMapperParams;
 import com.reagan.core.util.QueryMapper;
 import com.reagan.util.PageBean;
@@ -25,22 +28,18 @@ public abstract class MapperDaoImpl<T> implements IMapperDao<T> {
 	}
 	
 	@Override
-	public void save(T t) throws Exception {
-		try {
-			objectMapperParams.objectArrayFactory(t);
-			baseDao.execute(objectMapperParams.getSql(), objectMapperParams.getArgs());
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Exception(e.getMessage());
-		}
+	public void save(T t) throws SQLException, DuplicateKeyException, MapperException {
+		objectMapperParams.objectArrayFactory(t);
+		baseDao.execute(objectMapperParams.getSql(), objectMapperParams.getArgs());
 	}
 	
 	/**
 	 * 保存实体对象
 	 * @param t 实体对象
 	 * @return int 返回主键
+	 * @throws MapperException 
 	 */
-	public Number saveRePk(T t) throws Exception {
+	public Number saveRePk(T t) throws SQLException, MapperException {
 		objectMapperParams.objectArrayFactory(t);
 		KeyHolder keyHolder = baseDao.saveRePrimarykey(objectMapperParams.getSql(), objectMapperParams.getArgs());
 		return keyHolder.getKey();

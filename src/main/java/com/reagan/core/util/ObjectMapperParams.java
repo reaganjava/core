@@ -6,10 +6,15 @@ import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.commons.beanutils.BeanUtils;
 
 
+
+
+import com.reagan.core.annotation.Join;
 import com.reagan.core.annotation.Mapper;
 import com.reagan.core.exception.MapperException;
 import com.reagan.util.LoggerUtil;
@@ -219,21 +224,66 @@ public class ObjectMapperParams<T> {
 		}
 	}
 	
+	public String joinMapperTable(Mapper classMapper, Join joinMapper) throws MapperException {
+		if(classMapper != null && joinMapper != null) {
+			String tableName = classMapper.tableName();
+			String mode = joinMapper.mode().getValue();
+			String pk = joinMapper.primaryKey();
+			if(ValidatorUtil.isNotEmpty(tableName)) {
+				String[] tableNames = tableName.split(",");
+				StringBuilder query = new StringBuilder(tableNames[0] + " ");
+				for(int i = 0; i < tableNames.length; i++) {
+					query.append(mode + " " + tableNames[i] + " ON " + tableNames[0] + "." + pk + " = " + tableNames[i] + "." + pk);
+				}
+				return query.toString();
+			} else {
+				throw new MapperException("表名不能为空必须要有正确的表名");
+			}
+		} else {
+			throw new MapperException("类没有对象映射注解");
+		}
+	}
+	
+	/**
+	 * 删除语句映射
+	 * @param T t 对象
+	 * @return 返回查询包装映射类
+	 * @throws MapperException 表明为空抛出映射异常
+	 */
 	public QueryMapper deleteWhereMapper(T t) throws MapperException {
 		QueryMapper queryMapper = new QueryMapper("DELETE FROM ");
 		return whereMapper(t, queryMapper);
 	}
 	
+	/**
+	 * 查询语句映射
+	 * @param T t 对象
+	 * @return 返回查询包装映射类
+	 * @throws MapperException 表明为空抛出映射异常
+	 */
 	public QueryMapper queryWhereMapper(T t) throws MapperException {
 		QueryMapper queryMapper = new QueryMapper("SELECT {0} FROM ");
-		return whereMapper(t, queryMapper);
+		return orderMapper(t, whereMapper(t, queryMapper));
 	}
 	
+	
+	
+	/**
+	 * 包装查询条件和排序
+	 * @param T t 对象
+	 * @return 返回查询包装映射类
+	 * @throws MapperException 表明为空抛出映射异常
+	 */
 	public QueryMapper whereMapper(T t, QueryMapper queryMapper) throws MapperException {
 		Class<?> clazz = t.getClass();
 		//获取映射注解
 		Mapper classMapper = t.getClass().getAnnotation(Mapper.class);
-		queryMapper.addQueryString(getMapperTable(classMapper) + " WHERE 1=1 ");
+		Join joinMapper = t.getClass().getAnnotation(Join.class);
+		if(joinMapper != null) {
+			queryMapper.addQueryString(joinMapperTable(classMapper, joinMapper) + " WHERE 1=1 ");
+		} else {
+			queryMapper.addQueryString(getMapperTable(classMapper) + " WHERE 1=1 ");
+		}
 		if(classMapper != null) {
 			for(Field field : clazz.getDeclaredFields()) {
 				Mapper mapper = field.getAnnotation(Mapper.class);
@@ -244,6 +294,32 @@ public class ObjectMapperParams<T> {
 			}
 		} else {
 			throw new MapperException("类没有对象映射注解");
+		}
+		return queryMapper;
+	}
+	
+	private QueryMapper orderMapper(T t, QueryMapper queryMapper) {
+		Class<?> clazz = t.getClass();
+		StringBuilder order = new StringBuilder(" ORDER BY ");
+		StringBuilder orderField = new StringBuilder("");
+		Map<Integer, String> sortMap = new TreeMap<Integer, String>();
+		for(Field field : clazz.getDeclaredFields()) {
+			Mapper mapper = field.getAnnotation(Mapper.class);
+			if(mapper != null) {
+				if(mapper.order()) {
+					sortMap.put(mapper.orderSort(), mapper.column() + " " + mapper.orderMode() + ",");
+				}
+			}
+		}
+		if(sortMap.size() != 0) {
+			for(int key : sortMap.keySet()) {
+				orderField.append(sortMap.get(key));
+			}
+			int start = orderField.lastIndexOf(",");
+			int end = orderField.length();
+			orderField.replace(start, end, "");
+			order.append(orderField);
+			queryMapper.addQueryString(order.toString());
 		}
 		return queryMapper;
 	}
