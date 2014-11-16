@@ -75,6 +75,15 @@ public @interface Mapper {
 	
 	
 	/**
+	* @Title: is
+	* @Description: 查询条件过滤
+	* @return String
+	* @throws
+	 */
+	public String filter() default "";
+	
+	
+	/**
 	* @Title: order
 	* @Description: 排序字段
 	* @return String

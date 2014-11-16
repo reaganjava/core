@@ -110,12 +110,12 @@
 		<!-- spring end -->
 		<!-- proxool begin -->
 		<dependency>
-			<groupId>com.logicalcobwebs</groupId>
+			<groupId>org.logicalcobwebs</groupId>
 			<artifactId>proxool</artifactId>
 			<version>0.9.1</version>
 		</dependency>
 		<dependency>
-			<groupId>com.logicalcobwebs</groupId>
+			<groupId>org.logicalcobwebs</groupId>
 			<artifactId>proxool_cglib</artifactId>
 			<version>0.9.1</version>
 		</dependency>

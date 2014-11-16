@@ -126,12 +126,16 @@ public class ObjectMapperParams<T> {
 				}
 				//更新查询字段
 				if(mapper.updateWhere()) {
-					Object whereValue = invokeMethod(t, field.getName(), null);
-					if(whereValue != null) {
-						whereBuilder.append(" AND " + mapper.column() + "=? ");
-						whereArgs.add(whereValue);
+					if(mapper.filter().equals("")) {
+						Object whereValue = invokeMethod(t, field.getName(), null);
+						if(whereValue != null) {
+							whereBuilder.append(" AND " + mapper.column() + "=? ");
+							whereArgs.add(whereValue);
+						} else {
+							throw new MapperException("更新查询参数不能为空"); 
+						}
 					} else {
-						throw new MapperException("更新查询参数不能为空"); 
+						whereBuilder.append(" AND " + mapper.filter());
 					}
 				}
 			}
@@ -348,8 +352,10 @@ public class ObjectMapperParams<T> {
 	private QueryMapper sqlWhere(QueryMapper queryMapper, Mapper mapper, Object value) {
 		if(mapper.like()) {
 			queryMapper.addQueryWhere(" AND " + mapper.column() + " LIKE ?", "%" + value + "%");
-		} else {
+		} else if(mapper.compare() != null){
 			queryMapper.addQueryWhere(" AND " + mapper.column() + mapper.compare() + "?", value);
+		} else if(mapper.filter() != null){
+			queryMapper.addQueryWhere(" AND " + mapper.filter(), null);
 		}
 		return queryMapper;
 	}
